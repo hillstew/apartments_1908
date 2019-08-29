@@ -7,11 +7,20 @@ require './lib/renter'
 class BuildingTest < Minitest::Test
   def setup
     @building = Building.new
-    @a1 = Apartment.new({number: "A1", monthly_rent: 1200, bathrooms: 1, bedrooms: 1})
-    @b2 = Apartment.new({number: "B2", monthly_rent: 999, bathrooms: 2, bedrooms: 2})
+    @a1 = Apartment.new({
+      number: "A1",
+      monthly_rent: 1200,
+      bathrooms: 1,
+      bedrooms: 1
+    })
+    @b2 = Apartment.new({
+      number: "B2",
+      monthly_rent: 999,
+      bathrooms: 2,
+      bedrooms: 2
+    })
     @jessie = Renter.new("Jessie")
     @spencer = Renter.new("Spencer")
-
   end
 
   def test_it_has_attributes
@@ -20,10 +29,12 @@ class BuildingTest < Minitest::Test
 
   def test_it_can_add_units
     @building.add_unit(@a1)
-    assert_equal [@a1], @building.units
-    @building.add_unit(@b1)
 
-    assert_equal [@a1, @b1], @building.units
+    assert_equal [@a1], @building.units
+
+    @building.add_unit(@b2)
+
+    assert_equal [@a1, @b2], @building.units
   end
 
   def test_it_can_find_average_rent
@@ -38,15 +49,15 @@ class BuildingTest < Minitest::Test
     @b2.add_renter(@spencer)
     @building.add_unit(@a1)
     @building.add_unit(@b2)
-    expected = @building.renter_with_highest_rent
+    actual = @building.renter_with_highest_rent
 
-    assert_equal expected, @spencer
+    assert_equal @spencer, actual
 
     @a1.add_renter(@jessie)
     @building.renter_with_highest_rent
-    expected = @building.renter_with_highest_rent
+    actual = @building.renter_with_highest_rent
 
-    assert_equal expected, @jessie
+    assert_equal @jessie, actual
   end
 
   def test_it_can_provide_annual_breakdown
