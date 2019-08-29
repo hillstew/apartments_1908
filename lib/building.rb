@@ -10,30 +10,27 @@ class Building
   end
 
   def average_rent
-    count = 0
-    @units.each do |unit|
-      count += unit.monthly_rent
+    count = @units.reduce(0) do |sum, unit|
+      sum += unit.monthly_rent
     end
     count.to_f / @units.length
   end
 
   def rented_units
-    rented = @units.find_all do |unit|
+    @units.find_all do |unit|
       unit.renter != nil
     end
   end
 
   def renter_with_highest_rent
-    rented = rented_units
-    rented.max_by do |rented_unit|
+    rented_units.max_by do |rented_unit|
       rented_unit.monthly_rent
     end.renter
   end
 
   def annual_breakdown
     breakdown = Hash.new
-    rented = rented_units
-    rented.each do |unit|
+    rented_units.each do |unit|
       breakdown[unit.renter.name] = unit.monthly_rent * 12
     end
     breakdown
